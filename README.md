@@ -1,23 +1,26 @@
-A lightweight Retrieval-Augmented Generation (RAG) chatbot built using:
+AI Chatbot using Retrieval-Augmented Generation (RAG)
 
-FastAPI (Backend API)
+A production-ready AI Chatbot built using FastAPI, Pinecone vector database, Ollama embeddings, and LLM-based context-aware answering.
+This project demonstrates how to build an end-to-end Retrieval-Augmented Generation system that can intelligently answer user queries based only on your documents.
 
-Ollama (Local LLM inference)
+ Project Overview
 
-Nomic Embed Text (Local embedding model)
+This chatbot combines vector embeddings, semantic search, and LLM reasoning to deliver accurate, document-grounded responses.
 
-Pinecone (Vector database)
+ Key Capabilities
 
-HTML/JS Frontend (Simple chat UI)
+ Automatic document ingestion (PDF/TXT)
 
-This project allows users to upload documents, build a vector index, and ask questions answered using retrieved context + LLM output.
+ Smart text chunking for high-quality retrieval
 
-🚀 Features
+ Embeddings generation using Ollama
 
-✅ Local LLM using Ollama
-✅ Local embeddings using nomic-embed-text
-✅ Vector search using Pinecone
-✅ Simple RAG pipeline (embed → store → retrieve → generate)
-✅ REST API using FastAPI
-✅ Basic frontend UI for chatting
-✅ Fully offline inference (except Pinecone)
+ Semantic search via Pinecone
+
+ Context-aware responses using RAG
+
+ FastAPI backend with REST APIs
+
+ CORS enabled for frontend integration
+
+ Clean code and modular architecture
