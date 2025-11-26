@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RAG Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f6f6f6;
+            display: flex;
+            justify-content: center;
+            padding-top: 40px;
+        }
+
+        #chat-container {
+            width: 450px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        #messages {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .msg {
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .user {
+            background: #d1e7ff;
+            text-align: right;
+        }
+
+        .bot {
+            background: #e9ffe9;
+            text-align: left;
+        }
+
+        #input-box {
+            width: 75%;
+            padding: 10px;
+        }
+
+        #send-btn {
+            padding: 10px 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="chat-container">
+    <h2>RAG Chatbot</h2>
+
+    <div id="messages"></div>
+
+    <input id="input-box" type="text" placeholder="Type your message..." />
+    <button id="send-btn">Send</button>
+</div>
+
+<script>
+    async function sendMessage() {
+        const inputBox = document.getElementById("input-box");
+        const messagesDiv = document.getElementById("messages");
+        const text = inputBox.value.trim();
+
+        if (!text) return;
+
+        // Show user message
+        messagesDiv.innerHTML += `<div class="msg user">${text}</div>`;
+        inputBox.value = "";
+
+        // Call your backend
+        const response = await fetch("http://127.0.0.1:8000/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query: text })
+        });
+
+        const data = await response.json();
+
+        // Show bot message
+        messagesDiv.innerHTML += `<div class="msg bot">${data.response}</div>`;
+        messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll
+    }
+
+    document.getElementById("send-btn").onclick = sendMessage;
+    document.getElementById("input-box").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") sendMessage();
+    });
+</script>
+
+</body>
+</html>
