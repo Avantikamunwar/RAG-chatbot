@@ -8,6 +8,7 @@ from backend.utils.embeddings import OllamaEmbeddings
 from backend.utils.loaders import load_all_pdfs, load_all_texts
 from backend.utils.pinecone_client import get_index, insert_vectors
 
+SIMILARITY_THRESHOLD = 0.75
 
 @lru_cache(maxsize=1)
 def _embedding_client() -> OllamaEmbeddings:
@@ -66,14 +67,22 @@ def build_vector_db() -> str:
 def retrieve(query: str, top_k: int = 3) -> str:
     index = get_index()
     q_emb = _embedding_client().embed_query(query)
-    res = index.query(vector=q_emb, top_k=top_k, include_metadata=True)
+    res = index.query(
+        vector=q_emb,
+        top_k=top_k,
+        include_metadata=True
+    )
     matches = res.get("matches") or []
-    if not matches:
+    filtered = [
+        m for m in matches
+        if m.get("score", 0) >= SIMILARITY_THRESHOLD
+    ]
+    if not filtered:
         return ""
     context = "\n".join(
         [
             match["metadata"]["text"]
-            for match in matches
+            for match in filtered
             if match.get("metadata") and match["metadata"].get("text")
         ]
     )
